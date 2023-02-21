@@ -1,94 +1,67 @@
+#importing the required libraries, 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.action_chains import ActionChains
-
 import time
-driver = webdriver.Chrome()
-driver.get("https://web.telegram.org/k/")
-
-"""
-n =input('')
-element = driver.find_element(By.CLASS_NAME, "c-ripple")
-elem.clear()
-elem.send_keys("pycon")"""
-""""actions = ActionChains(driver)
-actions.context_click(element)
-
-actions.perform()
-"
-"""
-"""elem.send_keys(Keys.RETURN)
-
-element.click()
-dropdown = Select(driver.find_element_by_id("my-dropdown"))
-
-cn = input("continue : ")
-
-
-
-enterelement = driver.find_elements(By.CLASS_NAME, "input-field-input")
-
-enter_element = enterelement[1]
-time.sleep(10)
-
-enter_element.send_keys(Keys.BACK_SPACE)
-enter_element.send_keys(Keys.BACK_SPACE)
-'
-
-#enter_number = driver.find_element(By.NAME, "39843100669469370")
-
-key = input("telegram sent you a code on your mobile: ")"""
-d = input("press enter after you logged in ")
-cookie = driver.get_cookie("auth_token")
-with open("cookie.txt", "w+") as m:
-    m.write(str(cookie))
-
-
 
 '''
-enter_number.send_keys(key)
-enter_number.send_keys(Keys.ENTER)
+    - the time.sleep() functions are used to give some time for the page to load
+    successfully so the next command will be able to access the html structure without any errors
+    - Login is manual
+'''
+#when you run this script in linux you might need the chrome webdriver
+driver = webdriver.Chrome()
 
-time.sleep(15)'''
+#fetchs the telegram login page
+driver.get("https://web.telegram.org/k/")
+
+#just a dummy input so the script will wait until you login and come back and press enter
+d = input("press enter after you logged in: ")
+
+#finding the telegram search bar
 search_bar = driver.find_element(By.CLASS_NAME, "input-field-input")
 
+#write the channel name 
 channel_name = input("write the channel Name: ")
+
+#fetching the channel
 search_bar.send_keys(channel_name)
 search_bar.send_keys(Keys.ENTER)
 
+#this is a wait because of the speed of my internet,it takes time to fetch the channel name
 time.sleep(10)
 
-button =driver.find_element(By.CLASS_NAME, "chatlist-chat-abitbigger")
+#it will click the first result that will pop up after writing the name
+button = driver.find_element(By.CLASS_NAME, "chatlist-chat-abitbigger")
 button.click()
 
 time.sleep(5)
+
+#it will open the side bar of  channel which have the information like users list etc
 channel = driver.find_element(By.CLASS_NAME, "content")
 channel.click()
 
-while True:
-    d = input("class name: ")
-    class_name = f"{d}"
-    chatlists = driver.find_element(By.CLASS_NAME, class_name)
-    try:    
-        channel.click()
-        break
-    except:
-        print("didn't worked out")
 
 time.sleep(2)
-chatlists.click()
+
+#it will get all the members in the channel, its not verified trying changing the class below
+# and check 
+chatlists = driver.find_elements(By.CLASS_NAME, "row-clickable")
+
+#paste the text you want to send to the extracted users
+text = input("write the text you wanna send: ")
+
 d = input()
-print(chatlists)
+#it will iterate through the list of users got from the list and perform the below block of code on each
 for chat in chatlists:
     time.sleep(3)
     chat.click()
     time.sleep(2)
+    #it will find the message option and write the message into it and send it 
     text_message = driver.find_element(By.CLASS_NAME, "input-message-input")
-    text = input("write the text")
     text_message.send_keys("hello ")
     text_message.send_keys(Keys.ENTER)
+    time.sleep(4)
+    #this will go one step back and try this same on the second name
+    element = driver.find_element(By.CLASS_NAME, "sidebar-close-button")
 
-
-conti = input()
